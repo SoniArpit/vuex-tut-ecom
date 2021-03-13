@@ -1,31 +1,30 @@
-import axios from "axios";
+// import axios from "axios";
+import Product from '../apis/Product'
+import Cart from '../apis/Cart'
+
 export const getProducts=({commit})=>{
-    axios.get("https://fakestoreapi.com/products/").then(response=>{
+    Product.all().then(response=>{
         // console.log(response.data);
         commit('SET_PRODUCTS',response.data);
     })
 }
 
 export const getProduct=({commit},productId)=>{
-    axios.get(`https://fakestoreapi.com/products/${productId}/`).then(response=>{
+    Product.show(productId).then(response=>{
         commit('SET_PRODUCT',response.data)
     })
 }
 
 
-// not working
+// not working api
 export const addProductToCart=({commit},{product, quantity})=>{
     commit("ADD_TO_CART",{product, quantity})
-
-    axios.post("https://fakestoreapi.com/carts",{userId:5, date: '2020-02-03', product:[{productId:product.id,quantity:quantity}]})
-
-
+    Cart.store({userId:5, date: '2020-02-03', product:[{productId:product.id,quantity:quantity}]})
 }
 
-// not working
-
+// not working api
 export const getCartItems=({commit})=>{
-    axios.get("https://fakestoreapi.com/cart").then(response=>{
+    Cart.all().then(response=>{
         commit("SET_CART",response.data)
         // console.log(response.data);
     })
@@ -37,13 +36,13 @@ export const removeProductFromCart=({commit},product)=>{
     commit("REMOVE_PRODUCT_FROM_CART",product)
 
     // will not work - just for demo
-    axios.delete(`https://fakestoreapi.com/carts/${product.id}`)
+    Cart.delete(product.id)
 }
 
 export const clearCartItems=({commit})=>{
     commit("CLEAR_CART_ITEMS")
 
     // will not work - just for demo
-    axios.delete(`https://fakestoreapi.com/carts/`)
+    Cart.deleteAll()
 
 }
